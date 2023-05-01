@@ -22,8 +22,8 @@ def main(url: str):
     for a in a_tags:
         item.append(a.get_attribute('href'))
 
-    data = "',".join("'" + str(i) for i in item) + "',"
-    print(data)
+    data = ",".join(str(i) for i in item)
+    print("'" + data + "'")
 
     driver.quit()
 
@@ -33,4 +33,4 @@ if __name__ == '__main__':
     arg.add_argument('--url', type=str)
     args = arg.parse_args()
 
-    exec(args.url)
+    main(args.url)
