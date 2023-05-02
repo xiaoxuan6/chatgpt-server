@@ -8,6 +8,7 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    if: github.repository == 'xiaoxuan6/chatgpt-server'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
