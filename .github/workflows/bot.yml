@@ -3,7 +3,7 @@ name: "sync chatGPT site"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 1 * * 1'
+    - cron: '0 1 * * *'
 
 jobs:
   sync:

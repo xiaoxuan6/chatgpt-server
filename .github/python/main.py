@@ -16,8 +16,9 @@ def main(url: str):
 
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     driver.get(url)
+    driver.maximize_window()
 
-    time.sleep(1)
+    time.sleep(3)
     a_tags = driver.find_elements_by_xpath('//*[@id="siteList"]//a')
 
     item = []
