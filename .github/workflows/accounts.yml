@@ -1,0 +1,47 @@
+name: "sync chatGPT account"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * 0'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: github.repository == 'xiaoxuan6/chatgpt-server'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: sync
+        env:
+          ACCOUNT_URL: ${{ secrets.ACCOUNT_URL }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./requirements.txt
+          data="$(python accounts.py --url=$ACCOUNT_URL)"
+          echo "datas=$data" >> $GITHUB_ENV
+        working-directory: .github/python
+      - name: Check if datas environment variable is empty
+        run: |
+          if [ -z "${{ env.datas }}" ]; then
+            echo "datas environment variable is empty. Exiting workflow."
+            exit 1
+          fi
+      - name: replace js
+        run:
+          data=${{ env.datas }} && sed -i "s|datas = .*;|datas = '$data';|g" ./js/accounts.js
+      - name: "Commit files"
+        run: |
+          git config --local user.email "1527736751@qq.com"
+          git config --local user.name "xiaoxuan6"
+          git add -A
+          git commit -m "fix: Update accounts.js" || exit 0
+      - name: "Push changes"
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
