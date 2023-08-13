@@ -1,6 +1,7 @@
 import argparse
 import threading
 import time
+import urllib.parse
 
 import requests
 from selenium import webdriver
@@ -23,7 +24,14 @@ def main(url: str):
 
     item = []
     for a in a_tags:
-        item.append(a.get_attribute('href'))
+        url = a.get_attribute('href')
+        parsed_url = urllib.parse.urlparse(url)
+        query_params = urllib.parse.parse_qs(parsed_url.query)
+
+        if "u" in query_params:
+            url = query_params["u"][0]
+
+        item.append(url)
 
     urls = checkUrls(item)
     data = ",".join(str(i) for i in urls)
