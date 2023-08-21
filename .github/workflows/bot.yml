@@ -24,10 +24,13 @@ jobs:
           pip install -r ./requirements.txt
           data="$(python main.py --url=$URL)"
           echo "urls=$data" >> $GITHUB_ENV
+          echo "urls: $data"
         working-directory: .github/python
       - name: Check if URLs environment variable is empty
         run: |
-          if [ -z "${{ env.urls }}" ]; then
+          urls=${{ env.urls }}
+          echo "urls: $urls"
+          if [ -z "$url" ]; then
             echo "URLs environment variable is empty. Exiting workflow."
             exit 1
           fi
