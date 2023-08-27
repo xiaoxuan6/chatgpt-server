@@ -30,7 +30,7 @@ jobs:
         run: |
           urls=${{ env.urls }}
           echo "urls: $urls"
-          if [ -z "$url" ]; then
+          if [ -z "$urls" ]; then
             echo "URLs environment variable is empty. Exiting workflow."
             exit 1
           fi
